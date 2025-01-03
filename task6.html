@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Оголошення типу документа HTML5 -->
+    <meta charset="UTF-8"> <!-- Встановлення кодування символів на UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Забезпечення адаптивності сторінки на мобільних пристроях -->
+    <title>Знижка на медикаменти</title> <!-- Заголовок сторінки -->
+
+    <!-- Вбудовані стилі CSS для форматування -->
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Шрифт для тексту */
+            margin: 20px; /* Відступи навколо сторінки */
+        }
+        table {
+            width: 100%; /* Таблиця займає всю ширину сторінки */
+            border-collapse: collapse; /* Прибираємо подвоєні границі між комірками */
+            margin-bottom: 20px; /* Відступ таблиці знизу */
+        }
+        th, td {
+            padding: 10px; /* Відступи всередині комірок */
+            text-align: left; /* Вирівнювання тексту по лівому краю */
+            border: 1px solid #ccc; /* Рамка для комірок */
+        }
+        th {
+            background-color: #f4f4f4; /* Фон для заголовків таблиць */
+        }
+        h1, h2 {
+            color: #333; /* Темно-сірий колір заголовків */
+        }
+    </style>
+</head>
+<body>
+    <!-- Основний заголовок сторінки -->
+    <h1>Медикаменти</h1>
+
+    <!-- Заголовок таблиці для початкових цін -->
+    <h2>Початкові ціни</h2>
+    <table id="initialPricesTable"> <!-- Таблиця з початковими цінами -->
+        <thead> <!-- Заголовок таблиці -->
+            <tr> <!-- Рядок заголовка -->
+                <th>ID</th> <!-- Стовпець для унікальних ідентифікаторів -->
+                <th>Назва</th> <!-- Стовпець для назви медикаменту -->
+                <th>Ціна (грн)</th> <!-- Стовпець для ціни медикаменту -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Сюди будуть додані рядки таблиці за допомогою JavaScript -->
+        </tbody>
+    </table>
+
+    <!-- Заголовок таблиці для цін зі знижками -->
+    <h2>Ціни зі знижками</h2>
+    <table id="discountedPricesTable"> <!-- Таблиця зі знижками -->
+        <thead> <!-- Заголовок таблиці -->
+            <tr> <!-- Рядок заголовка -->
+                <th>ID</th> <!-- Стовпець для унікальних ідентифікаторів -->
+                <th>Назва</th> <!-- Стовпець для назви медикаменту -->
+                <th>Ціна (грн)</th> <!-- Стовпець для ціни медикаменту -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Сюди будуть додані рядки таблиці за допомогою JavaScript -->
+        </tbody>
+    </table>
+
+    <!-- Підключення JavaScript для функціональності -->
+    <script>
+        // Масив медикаментів із початковими цінами
+        const medicines = [
+            { name: "Noshpa", price: 170 }, // Медикамент 1
+            { name: "Analgin", price: 55 }, // Медикамент 2
+            { name: "Quanil", price: 310 }, // Медикамент 3
+            { name: "Alphacholine", price: 390 }, // Медикамент 4
+        ];
+
+        // Функція для обчислення знижок
+        function applyDiscount(medicines) {
+            return medicines.map((medicine, index) => {
+                return {
+                    id: index + 1, // Додаємо унікальний ідентифікатор
+                    name: medicine.name, // Назва медикаменту
+                    price: medicine.price > 300 
+                        ? medicine.price * 0.7 // Якщо ціна > 300, знижка 30%
+                        : medicine.price // Якщо ціна <= 300, залишаємо без змін
+                };
+            });
+        }
+
+        // Функція для заповнення таблиці
+        function fillTable(tableId, medicinesArray) {
+            const tableBody = document.querySelector(`#${tableId} tbody`); // Знаходимо тіло таблиці
+            medicinesArray.forEach(medicine => { // Проходимо по кожному елементу масиву
+                const row = document.createElement('tr'); // Створюємо новий рядок таблиці
+                row.innerHTML = `
+                    <td>${medicine.id}</td> <!-- Додаємо ID -->
+                    <td>${medicine.name}</td> <!-- Додаємо назву -->
+                    <td>${medicine.price.toFixed(2)}</td> <!-- Додаємо ціну -->
+                `;
+                tableBody.appendChild(row); // Додаємо рядок у таблицю
+            });
+        }
+
+        // Формування таблиці початкових цін
+        const initialMedicines = medicines.map((medicine, index) => ({
+            id: index + 1, // Унікальний ID
+            name: medicine.name, // Назва медикаменту
+            price: medicine.price, // Початкова ціна
+        }));
+        fillTable('initialPricesTable', initialMedicines); // Заповнюємо таблицю
+
+        // Формування таблиці зі знижками
+        const discountedMedicines = applyDiscount(medicines); // Розраховуємо знижки
+        fillTable('discountedPricesTable', discountedMedicines); // Заповнюємо таблицю
+    </script>
+</body>
+</html>

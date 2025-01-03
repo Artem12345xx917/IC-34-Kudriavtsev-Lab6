@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Кодова сторінки: UTF-8 для підтримки багатьох мов -->
+    <meta charset="UTF-8">
+    <!-- Забезпечує коректне масштабування сторінки на мобільних пристроях -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Заголовок сторінки -->
+    <title>Product Details</title>
+</head>
+<body>
+    <!-- Головний заголовок сторінки -->
+    <h1>Get Product Details</h1>
+
+    <!-- Блок форми для введення ID товару -->
+    <div>
+        <!-- Поле для введення ID товару -->
+        <label for="productIdInput">Enter Product ID:</label>
+        <input 
+            type="number"              
+            id="productIdInput"       
+            placeholder="Enter product ID" 
+        >
+        <!-- Кнопка для отримання деталей про товар -->
+        <button onclick="fetchProductDetails()">Get Details</button>
+    </div>
+
+    <!-- Блок для виводу результатів -->
+    <div id="result" style="margin-top: 20px;"></div>
+
+    <!-- Підключення JavaScript коду -->
+    <script>
+        // Створюємо масив, що імітує базу даних товарів
+        const products = [
+            { id: 1, name: "Laptop", price: 1200 }, // Перший товар
+            { id: 2, name: "Smartphone", price: 800 }, // Другий товар
+            { id: 3, name: "Tablet", price: 500 }, // Третій товар
+        ];
+
+        /**
+         * Функція для отримання деталей про товар за його ID.
+         * @param {number} productId - ID товару, який шукаємо.
+         * @param {function} successCallback - Функція, що викликається при успіху.
+         * @param {function} errorCallback - Функція, що викликається при помилці.
+         */
+        function getProductDetails(productId, successCallback, errorCallback) {
+            // Знаходимо товар за ID у масиві `products`
+            const product = products.find(p => p.id === productId);
+
+            // Якщо товар знайдено, викликаємо successCallback з деталями товару
+            if (product) {
+                successCallback(product);
+            } else {
+                // Якщо товар не знайдено, викликаємо errorCallback з текстом помилки
+                errorCallback(`Product with ID ${productId} not found.`);
+            }
+        }
+
+        /**
+         * Функція для обробки запиту на отримання деталей товару.
+         * Викликається при натисканні на кнопку.
+         */
+        function fetchProductDetails() {
+            // Зчитуємо значення ID з поля вводу, конвертуємо у число
+            const productId = parseInt(document.getElementById('productIdInput').value, 10);
+            // Елемент, де будемо виводити результат
+            const resultDiv = document.getElementById('result');
+
+            // Якщо ID не є числом, виводимо повідомлення про помилку
+            if (isNaN(productId)) {
+                resultDiv.textContent = "Please enter a valid product ID.";
+                return; // Зупиняємо виконання, якщо введено некоректне значення
+            }
+
+            // Викликаємо функцію getProductDetails
+            getProductDetails(
+                productId,
+                // Callback-функція успіху
+                product => {
+                    // Виводимо інформацію про знайдений товар
+                    resultDiv.textContent = `Product found: Name: ${product.name}, Price: ${product.price} credits.`;
+                },
+                // Callback-функція помилки
+                error => {
+                    // Виводимо повідомлення про помилку
+                    resultDiv.textContent = `Error: ${error}`;
+                }
+            );
+        }
+    </script>
+</body>
+</html>
